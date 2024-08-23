@@ -1,6 +1,7 @@
 
 class Texts {
-  static var app_version = "1.0.0";
+  static var appName = "Movie Box";
+  static var appVersion = "1.0.0";
 
   //////// service
   static const String tokenInvalid = "tokenInvalid";
