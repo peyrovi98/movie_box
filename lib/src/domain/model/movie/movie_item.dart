@@ -7,7 +7,7 @@ class MovieItem {
   String title;
   int year;
   List<String> genre;
-  int rating;
+  double rating;
   String director;
   List<String> actors;
   String plot;
@@ -45,7 +45,7 @@ class MovieItem {
     String title = "";
     int year = -1;
     List<String> genre = List.empty(growable: true);
-    int rating = -1;
+    double rating = -1.toDouble();
     String director = "";
     List<String> actors = List.empty(growable: true);
     String plot = "";
@@ -60,28 +60,30 @@ class MovieItem {
     String website = "";
 
     if (jsonObject.containsKey("id")) {
-      id = jsonObject["id"];
+      id = int.parse(jsonObject["id"].toString());
     }
     if (jsonObject.containsKey("title")) {
       title = jsonObject["title"];
     }
     if (jsonObject.containsKey("year")) {
-      year = jsonObject["year"];
+      year = int.parse(jsonObject["year"].toString());
     }
     if (jsonObject.containsKey("genre")) {
-      for (var strObj in jsonObject["genre"]) {
-        genre.add(strObj);
+      var list = jsonObject["genre"] is List ? jsonObject["genre"] : jsonDecode(jsonObject["genre"].toString());
+      for(var item in list) {
+        actors.add(item.toString());
       }
     }
     if (jsonObject.containsKey("rating")) {
-      rating = jsonObject["rating"];
+      rating = double.parse(jsonObject["rating"].toString());
     }
     if (jsonObject.containsKey("director")) {
       director = jsonObject["director"];
     }
     if (jsonObject.containsKey("actors")) {
-      for (var strObj in jsonObject["actors"]) {
-        actors.add(strObj);
+      var list = jsonObject["actors"] is List ? jsonObject["actors"] : jsonDecode(jsonObject["actors"].toString());
+      for(var item in list) {
+        actors.add(item.toString());
       }
     }
     if (jsonObject.containsKey("plot")) {
