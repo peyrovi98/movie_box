@@ -1,0 +1,17 @@
+const String filedId = "id";
+const String filedTitle = "title";
+const String filedYear = "year";
+const String filedGenre = "genre";
+const String filedRating = "rating";
+const String filedDirector = "director";
+const String filedActors = "actors";
+const String filedPlot = "plot";
+const String filedPoster = "poster";
+const String filedTrailer = "trailer";
+const String filedRuntime = "runtime";
+const String filedAwards = "awards";
+const String filedCountry = "country";
+const String filedLanguage = "language";
+const String filedBoxOffice = "boxOffice";
+const String filedProduction = "production";
+const String filedWebsite = "website";

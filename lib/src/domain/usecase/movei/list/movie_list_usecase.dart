@@ -1,4 +1,4 @@
-import 'package:movie_box/src/domain/model/movie_item.dart';
+import 'package:movie_box/src/domain/model/movie/movie_item.dart';
 import 'package:movie_box/src/domain/repository/movie/list/movie_list_repository.dart';
 
 class MovieListUseCase {
