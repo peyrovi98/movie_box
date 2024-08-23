@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-import 'package:movie_box/res/texts.dart';
 import 'package:movie_box/src/data/datasource/movie/movie_data_provider.dart';
 import 'package:movie_box/src/data/source/ram/ram_storage.dart';
 import 'package:movie_box/src/domain/model/movie/movie_item.dart';
@@ -16,8 +14,9 @@ class MovieListRepositoryImpl implements MovieListRepository {
       List<MovieItem> movieList;
       if (RamStorage().hasNetwork()) {
         movieList = await _apiDataProvider.getList(search);
-        await _localDataProvider.clear();
-        await _localDataProvider.createOrUpdateList(movieList);
+        if(search.isEmpty) {
+          await _localDataProvider.createOrUpdateList(movieList);
+        }
       } else {
         movieList = await _localDataProvider.getList(search);
       }

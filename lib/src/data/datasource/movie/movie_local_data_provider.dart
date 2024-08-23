@@ -19,7 +19,7 @@ class MovieListLocalDataProvider implements MovieListDataProvider {
 
   @override
   Future<void> createOrUpdateList(List<MovieItem> movieList) async {
-    for(var movieItem in movieList){
+    for (var movieItem in movieList) {
       await createOrUpdate(movieItem);
     }
   }
@@ -32,7 +32,8 @@ class MovieListLocalDataProvider implements MovieListDataProvider {
   @override
   Future<List<MovieItem>> getList(String search) async {
     List<MovieItem> movieList = List.empty(growable: true);
-    List<Map> jsonArray = await _database.query(tableName);
+    List<Map> jsonArray = await _database
+        .query(tableName, where: "$filedTitle LIKE ?", whereArgs: ['%$search%']);
     for (var jsonObject in jsonArray) {
       movieList.add(MovieItem.fromJson(jsonObject));
     }

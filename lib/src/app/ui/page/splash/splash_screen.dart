@@ -3,6 +3,7 @@ import 'package:movie_box/res/colors.dart';
 import 'package:movie_box/res/dimens.dart';
 import 'package:movie_box/res/texts.dart';
 import 'package:movie_box/src/app/ui/page/home/home_screen.dart';
+import 'package:movie_box/src/app/ui/widget/base/base_stateful_widget.dart';
 import 'package:movie_box/src/app/ui/widget/progress/loading_widget.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,19 +13,13 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends BaseStatefulState<SplashScreen> {
   late BuildContext context;
 
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (BuildContext context) {
-            return const HomeScreen();
-          },
-        ),
-      );
+      navigate(const HomeScreen(), replacement: true);
     });
     super.initState();
   }

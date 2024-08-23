@@ -23,7 +23,7 @@ class MovieListApiDataProvider implements MovieListDataProvider {
   @override
   Future<List<MovieItem>> getList(String search) async {
       var result =
-      await _webService.callApi(MethodType.GET, ApiEndpoint.movieList);
+      await _webService.callApi(MethodType.GET, search.isEmpty ? ApiEndpoint.movieList : ApiEndpoint.searchMovieList(search));
       List<MovieItem> movieList = List.empty(growable: true);
       if (result.status) {
         for (var jsonObject in result.data) {
