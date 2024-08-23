@@ -4,7 +4,7 @@ import 'package:movie_box/res/dimens.dart';
 import 'package:movie_box/res/texts.dart';
 import 'package:movie_box/src/app/ui/page/home/home_screen.dart';
 import 'package:movie_box/src/app/ui/widget/base/base_stateful_widget.dart';
-import 'package:movie_box/src/app/ui/widget/progress/loading_widget.dart';
+import 'package:movie_box/src/app/ui/widget/custom/progress/loading_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

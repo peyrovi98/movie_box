@@ -71,7 +71,7 @@ class MovieItem {
     if (jsonObject.containsKey("genre")) {
       var list = jsonObject["genre"] is List ? jsonObject["genre"] : jsonDecode(jsonObject["genre"].toString());
       for(var item in list) {
-        actors.add(item.toString());
+        genre.add(item.toString());
       }
     }
     if (jsonObject.containsKey("rating")) {

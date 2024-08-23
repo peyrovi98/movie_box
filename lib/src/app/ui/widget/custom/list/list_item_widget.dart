@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_box/res/colors.dart';
 import 'package:movie_box/res/dimens.dart';
 import 'package:movie_box/src/domain/model/movie/movie_item.dart';
+import 'package:movie_box/src/domain/model/movie/movie_static.dart';
 
 class ListItemWidget extends StatelessWidget {
   final MovieItem movieItem;
@@ -27,31 +29,55 @@ class ListItemWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(
           vertical: Dimens.padding_smaller, horizontal: Dimens.padding_small),
       color: UiColors.amber_700,
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: Dimens.box_size_medium,
-            height: Dimens.box_size_medium,
-            child: avatarImage(item.poster),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: Dimens.padding_smallest,
-                  horizontal: Dimens.padding_small),
-              child: Column(
-                children: [
-                  detailsItem("name", "genre", UiColors.blueGray_900),
-                  detailsItem(
-                      item.title,
-                      item.actors.isNotEmpty ? item.actors[0] : "-",
-                      UiColors.white),
-                ],
+      child: SizedBox(
+        height: Dimens.box_size_medium,
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              width: Dimens.box_size_medium,
+              height: double.maxFinite,
+              child: avatarImage(item.poster),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: Dimens.padding_small),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _titleWidget(filedTitle),
+                    _descriptionWidget(item.title),
+                    _titleWidget(filedGenre),
+                    _descriptionWidget(item.genre.join(', ')),
+                    _titleWidget(filedRating),
+                    _descriptionWidget(item.rating.toString()),
+                  ],
+                ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _titleWidget(String text) {
+    return Text(
+      text,
+      style: TextStyle(
+          color: UiColors.blueGray_900, fontSize: Dimens.font_size_small),
+    );
+  }
+
+  Widget _descriptionWidget(String text) {
+    return Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: UiColors.white,
+        fontSize: Dimens.font_size_small,
       ),
     );
   }
@@ -82,9 +108,10 @@ class ListItemWidget extends StatelessWidget {
 
   Widget avatarImage(String image) {
     return ClipRRect(
-      borderRadius: const BorderRadius.horizontal(left: Radius.circular(15)),
+      borderRadius: BorderRadius.horizontal(left: Radius.circular(Dimens.radius_medium)),
       child: CachedNetworkImage(
         imageUrl: image,
+        fit: BoxFit.fill,
         placeholder: (context, url) => Container(
           padding: EdgeInsets.all(Dimens.padding_large),
           child: const Icon(

@@ -9,8 +9,8 @@ import 'package:movie_box/src/app/logic/movie/list/movie_list_bloc.dart';
 import 'package:movie_box/src/app/logic/movie/list/movie_list_page_data.dart';
 import 'package:movie_box/src/app/ui/page/detail/detail_screen.dart';
 import 'package:movie_box/src/app/ui/widget/base/base_stateful_widget.dart';
-import 'package:movie_box/src/app/ui/widget/list/list_item_widget.dart';
-import 'package:movie_box/src/app/ui/widget/progress/loading_widget.dart';
+import 'package:movie_box/src/app/ui/widget/custom/list/list_item_widget.dart';
+import 'package:movie_box/src/app/ui/widget/custom/progress/loading_widget.dart';
 import 'package:movie_box/src/domain/model/movie/movie_item.dart';
 
 class HomeScreen extends StatefulWidget {
