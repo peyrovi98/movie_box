@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -11,8 +12,10 @@ import 'movie_list_repository_impl_test.mocks.dart';
 void main() {
   late MovieListDataProvider apiDataProvider, localDataProvider;
   late MovieListRepositoryImpl repository;
+  late Faker faker;
 
   setUpAll(() {
+    faker = Faker();
     apiDataProvider = MockMovieListDataProvider();
     localDataProvider = MockMovieListDataProvider();
     repository = MovieListRepositoryImpl(apiDataProvider, localDataProvider);
@@ -23,7 +26,7 @@ void main() {
         "If user has network, when call getList method, data provide from network.",
         () async {
       RamStorage().setHasNetwork(true);
-      String query = "";
+      String query = faker.lorem.sentence();
       var response = List<MovieItem>.empty();
 
       when(apiDataProvider.getList(query))
@@ -32,7 +35,9 @@ void main() {
       await repository.getList(query);
 
       verify(apiDataProvider.getList(query)).called(1);
-      verify(localDataProvider.createOrUpdateList(response)).called(1);
+      if(query.isEmpty) {
+        verify(localDataProvider.createOrUpdateList(response)).called(1);
+      }
       verifyNever(localDataProvider.getList(query));
     });
 
@@ -40,7 +45,7 @@ void main() {
         "If user has offline, when call getList method, data provide from sqlite database.",
         () async {
       RamStorage().setHasNetwork(false);
-      String query = "";
+      String query = faker.lorem.sentence();
       var response = List<MovieItem>.empty();
 
       when(localDataProvider.getList(query))

@@ -21,7 +21,7 @@ void main() {
     faker = Faker();
   });
 
-  group("Test invoke", () {
+  group("movie list usCase invoke", () {
     test("When call invoke then call getList on repository", () async {
       when(repository.getList(any))
           .thenAnswer((realInvocation) => Future.value([]));

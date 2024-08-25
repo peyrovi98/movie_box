@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:equatable/equatable.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -14,6 +15,7 @@ import 'movie_list_bloc_test.mocks.dart';
 void main() {
   late MovieListBloc createOrUpdateBloc;
   late MovieListUseCase categoryUseCase;
+  final Faker faker = Faker();;
 
   setUp(() {
     EquatableConfig.stringify = true;
@@ -38,7 +40,7 @@ void main() {
     },
   );
 
-  String query = "Test";
+  String query = faker.lorem.sentence();
   blocTest<MovieListBloc, MovieListPageData>(
     "request list with query filter and result most be success",
     build: () {

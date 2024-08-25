@@ -21,7 +21,7 @@ void main() {
     faker = Faker();
   });
 
-  test('get list items', () async {
+  test('get list items from server', () async {
     String query = faker.lorem.sentence();
     var items = List<MovieItem>.empty(growable: true);
     items.add(getFakeMovieItem());
@@ -31,7 +31,7 @@ void main() {
       return server.reply(
         200,
         items.map((e) => e.toJson()).toList(),
-        delay: const Duration(seconds: 1),
+        delay: const Duration(seconds: 5),
       );
     });
     var retrieveItems = await dataProvider.getList(query);
