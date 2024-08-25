@@ -2,6 +2,8 @@ class Dimens {
   //box_size
   static double box_size_small = 60;
   static double box_size_medium = 120;
+  static double box_size_large = 180;
+  static double box_size_xlarge = 220;
   //padding
   static double padding_smallest = 2;
   static double padding_smaller = 5;

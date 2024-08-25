@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_box/res/colors.dart';
 import 'package:movie_box/res/dimens.dart';
+import 'package:movie_box/res/drawables.dart';
 import 'package:movie_box/res/texts.dart';
 import 'package:movie_box/src/app/di/di.dart';
 import 'package:movie_box/src/app/logic/base/page_status.dart';
@@ -21,8 +22,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends BaseStatefulState<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
   final MovieListBloc _movieListBloc =
       MovieListBloc(movieListUseCase: DI().getMovieListUseCase());
+
   String _query = "";
 
   @override
@@ -30,16 +33,19 @@ class _HomeScreenState extends BaseStatefulState<HomeScreen> {
     _movieListBloc.add(MovieListEvent());
     return BlocProvider<MovieListBloc>(
       create: (BuildContext context) => _movieListBloc,
-      child: Scaffold(
-        backgroundColor: UiColors.blueGray_900,
-        body: Column(
-          children: [
-            SizedBox(
-              height: Dimens.padding_large,
-            ),
-            searchBar(),
-            Expanded(child: _moviePage(context)),
-          ],
+      child: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: Scaffold(
+          backgroundColor: UiColors.blueGray_900,
+          body: Column(
+            children: [
+              SizedBox(
+                height: Dimens.padding_large,
+              ),
+              searchBar(),
+              Expanded(child: _moviePage(context)),
+            ],
+          ),
         ),
       ),
     );
@@ -58,6 +64,7 @@ class _HomeScreenState extends BaseStatefulState<HomeScreen> {
             horizontal: Dimens.padding_small,
             vertical: Dimens.padding_smallest),
         child: TextField(
+          controller: _searchController,
           style: const TextStyle(
             color: UiColors.blueGray_900,
           ),
@@ -97,7 +104,9 @@ class _HomeScreenState extends BaseStatefulState<HomeScreen> {
 
   _viewChooser(MovieListPageData state) {
     return switch (state.pageStatus) {
-      PageStatus.success => _movieListWidget(context, state.movieList),
+      PageStatus.success => state.movieList.isEmpty
+          ? _emptyPage()
+          : _movieListWidget(context, state.movieList),
       PageStatus.failure => _viewError(state.message),
       _ => const LoadingWidget(
           color: UiColors.amber_700,
@@ -113,7 +122,11 @@ class _HomeScreenState extends BaseStatefulState<HomeScreen> {
         return ListItemWidget(
           movieItem: movieList[index],
           onPressed: (movieItem) {
-            navigate( DetailScreen(movieItem: movieItem,), replacement: false);
+            navigate(
+                DetailScreen(
+                  movieItem: movieItem,
+                ),
+                replacement: false);
           },
         );
       },
@@ -121,19 +134,56 @@ class _HomeScreenState extends BaseStatefulState<HomeScreen> {
     );
   }
 
+  Widget _emptyPage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          Images.spaceImage,
+          width: Dimens.box_size_xlarge,
+        ),
+        SizedBox(
+          height: Dimens.padding_large,
+        ),
+        Text(Texts.noDataFound,
+            style: TextStyle(
+                color: UiColors.blueGray_300,
+                fontSize: Dimens.font_size_xlarge,
+                fontWeight: FontWeight.bold))
+      ],
+    );
+  }
+
   Widget _viewError(String message) {
     showSnack(message);
-    return Center(
-      child: InkWell(
-        child: Icon(
-          Icons.refresh,
-          size: Dimens.box_size_small,
-          color: UiColors.amber_700,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          Images.errorImage,
+          width: Dimens.box_size_xlarge,
         ),
-        onTap: () {
-          _movieListBloc.add(MovieListEvent(query: _query));
-        },
-      ),
+        InkWell(
+          child: Icon(
+            Icons.refresh_rounded,
+            size: Dimens.box_size_small,
+            color: UiColors.blueGray_300,
+          ),
+          onTap: () {
+            _movieListBloc.add(MovieListEvent(query: _query));
+          },
+        ),
+      ],
     );
+  }
+
+  Future<bool> _onBackPressed() async {
+    if (_query.isEmpty) {
+      return true;
+    }
+    _query = "";
+    _movieListBloc.add(MovieListEvent());
+    _searchController.text = "";
+    return false;
   }
 }

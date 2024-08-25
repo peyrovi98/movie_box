@@ -22,23 +22,23 @@ class MovieItem {
   String website;
 
   MovieItem(
-      this.id,
-      this.title,
-      this.year,
-      this.genre,
-      this.rating,
-      this.director,
-      this.actors,
-      this.plot,
-      this.poster,
-      this.trailer,
-      this.runtime,
-      this.awards,
-      this.country,
-      this.language,
-      this.boxOffice,
-      this.production,
-      this.website);
+      {required this.id,
+      required this.title,
+      required this.year,
+      required this.genre,
+      required this.rating,
+      required this.director,
+      required this.actors,
+      required this.plot,
+      required this.poster,
+      required this.trailer,
+      required this.runtime,
+      required this.awards,
+      required this.country,
+      required this.language,
+      required this.boxOffice,
+      required this.production,
+      required this.website});
 
   static MovieItem fromJson(Map jsonObject) {
     int id = -1;
@@ -69,8 +69,10 @@ class MovieItem {
       year = int.parse(jsonObject["year"].toString());
     }
     if (jsonObject.containsKey("genre")) {
-      var list = jsonObject["genre"] is List ? jsonObject["genre"] : jsonDecode(jsonObject["genre"].toString());
-      for(var item in list) {
+      var list = jsonObject["genre"] is List
+          ? jsonObject["genre"]
+          : jsonDecode(jsonObject["genre"].toString());
+      for (var item in list) {
         genre.add(item.toString());
       }
     }
@@ -81,8 +83,10 @@ class MovieItem {
       director = jsonObject["director"];
     }
     if (jsonObject.containsKey("actors")) {
-      var list = jsonObject["actors"] is List ? jsonObject["actors"] : jsonDecode(jsonObject["actors"].toString());
-      for(var item in list) {
+      var list = jsonObject["actors"] is List
+          ? jsonObject["actors"]
+          : jsonDecode(jsonObject["actors"].toString());
+      for (var item in list) {
         actors.add(item.toString());
       }
     }
@@ -117,44 +121,44 @@ class MovieItem {
       website = jsonObject["website"];
     }
     return MovieItem(
-        id,
-        title,
-        year,
-        genre,
-        rating,
-        director,
-        actors,
-        plot,
-        poster,
-        trailer,
-        runtime,
-        awards,
-        country,
-        language,
-        boxOffice,
-        production,
-        website);
+        id: id,
+        title: title,
+        year: year,
+        genre: genre,
+        rating: rating,
+        director: director,
+        actors: actors,
+        plot: plot,
+        poster: poster,
+        trailer: trailer,
+        runtime: runtime,
+        awards: awards,
+        country: country,
+        language: language,
+        boxOffice: boxOffice,
+        production: production,
+        website: website);
   }
 
   Map<String, Object?> toJson() {
     return {
-      filedId : id,
-      filedTitle : title,
-      filedYear : year,
-      filedGenre : jsonEncode(genre),
-      filedRating : rating,
-      filedDirector : director,
-      filedActors : jsonEncode(actors),
-      filedPlot : plot,
-      filedPoster : poster,
-      filedTrailer : trailer,
-      filedRuntime : runtime,
-      filedAwards : awards,
-      filedCountry : country,
-      filedLanguage : language,
-      filedBoxOffice : boxOffice,
-      filedProduction : production,
-      filedWebsite : website,
+      filedId: id,
+      filedTitle: title,
+      filedYear: year,
+      filedGenre: jsonEncode(genre),
+      filedRating: rating,
+      filedDirector: director,
+      filedActors: jsonEncode(actors),
+      filedPlot: plot,
+      filedPoster: poster,
+      filedTrailer: trailer,
+      filedRuntime: runtime,
+      filedAwards: awards,
+      filedCountry: country,
+      filedLanguage: language,
+      filedBoxOffice: boxOffice,
+      filedProduction: production,
+      filedWebsite: website,
     };
   }
 }
