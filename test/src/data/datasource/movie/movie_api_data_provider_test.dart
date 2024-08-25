@@ -1,26 +1,22 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:movie_box/src/data/datasource/movie/movie_api_data_provider.dart';
-import 'package:movie_box/src/data/datasource/movie/movie_api_data_provider.dart';
-import 'package:movie_box/src/data/datasource/movie/movie_local_data_provider.dart';
 import 'package:movie_box/src/data/source/server/api_endpoint.dart';
-import 'package:movie_box/src/data/source/server/service_response_model.dart';
 import 'package:movie_box/src/data/source/server/web_service.dart';
 import 'package:movie_box/src/domain/model/movie/movie_item.dart';
 import 'package:test/test.dart';
-
 import '../../../fake_items.dart';
 
 void main() {
   late MovieListApiDataProvider dataProvider;
   late WebService webservice;
+  final dio = Dio();
+  final dioAdapter = DioAdapter(dio: dio);
   late Faker faker;
 
   setUpAll(() async {
-    webservice = WebService(Dio());
+    webservice = WebService(dio);
     dataProvider = MovieListApiDataProvider(webservice);
     faker = Faker();
   });
@@ -31,15 +27,18 @@ void main() {
     items.add(getFakeMovieItem());
     items.add(getFakeMovieItem());
     items.add(getFakeMovieItem());
-    var responseModel = ServiceResponseModel(true, "", jsonEncode(items));
-    when(webservice.callApi(MethodType.GET, ApiEndpoint.searchMovieList(query)))
-        .thenAnswer( (_) => Future(() => responseModel));
-
+    dioAdapter.onGet(ApiEndpoint.searchMovieList(query), (server) {
+      return server.reply(
+        200,
+        items.map((e) => e.toJson()).toList(),
+        delay: const Duration(seconds: 1),
+      );
+    });
     var retrieveItems = await dataProvider.getList(query);
 
     expect(retrieveItems, isNotNull);
     expect(retrieveItems.length, items.length);
-    for(int index = 0; index < retrieveItems.length; index++) {
+    for (int index = 0; index < retrieveItems.length; index++) {
       expect(retrieveItems[index].id, items[index].id);
       expect(retrieveItems[index].rating, items[index].rating);
       expect(retrieveItems[index].genre, items[index].genre);
