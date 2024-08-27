@@ -26,14 +26,15 @@ class MovieListLocalDataProvider implements MovieListDataProvider {
 
   @override
   Future<void> createOrUpdate(MovieItem movieItem) async {
-    _database.insert(tableName, movieItem.toJson());
+    _database.insert(tableName, movieItem.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
   Future<List<MovieItem>> getList(String search) async {
     List<MovieItem> movieList = List.empty(growable: true);
-    List<Map> jsonArray = await _database
-        .query(tableName, where: "$filedTitle LIKE ?", whereArgs: ['%$search%']);
+    List<Map> jsonArray = await _database.query(tableName,
+        where: "$filedTitle LIKE ?", whereArgs: ['%$search%']);
     for (var jsonObject in jsonArray) {
       movieList.add(MovieItem.fromJson(jsonObject));
     }
